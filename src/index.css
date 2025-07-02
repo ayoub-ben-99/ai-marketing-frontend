@@ -1,5 +1,6 @@
 @import "tailwindcss";
-@import 'remixicon/fonts/remixicon.css';
+@import "remixicon/fonts/remixicon.css";
+@custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
   --color-prm: #6859e8;
@@ -13,6 +14,9 @@
   font-weight: weight;
   font-style: normal;
   font-variation-settings: "slnt" 0;
+}
+* {
+  transition: all .3s;
 }
 
 body {

@@ -6,12 +6,13 @@ import { useTranslation } from "react-i18next";
 import i18n from "../lib/i18n";
 
 export default function Header() {
-  const navItems = ["home", "services", "about", "contact"];
   const [darkMode, setDarkMode] = useState(true);
   const containerRef = useRef<HTMLDivElement>(null);
   const { t, i18n } = useTranslation();
+  const navItems = t("nav_bar", { returnObjects: true }) as string[];
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const menuRef = useRef(null);
+  const [settingsOpen, setSettingsOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (containerRef.current) {
@@ -42,8 +43,44 @@ export default function Header() {
       );
     }
   }, [isMenuOpen]);
+
+  const toggleMenu = () => {
+    if (settingsOpen) {
+      gsap.to(menuRef.current, {
+        opacity: 0,
+        y: -10,
+        duration: 0.3,
+        onComplete: () => setSettingsOpen(false),
+      });
+    } else {
+      setSettingsOpen(true);
+    }
+  };
+
+  useEffect(() => {
+    if (settingsOpen) {
+      gsap.fromTo(
+        menuRef.current,
+        { opacity: 0, y: -10 },
+        { opacity: 1, y: 0, duration: 0.3 }
+      );
+    }
+  }, [settingsOpen]);
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (
+        containerRef.current &&
+        !containerRef.current.contains(e.target as Node)
+      ) {
+        setSettingsOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
   return (
-    <header className="flex z-30 py-5 px-4 justify-between items-center relative shadow-sm">
+    <header className="flex z-30 py-5 px-4 justify-between items-center relative">
       <h1 className="text-2xl font-bold text-black dark:text-white">سوقي</h1>
 
       {/* زر القائمة في الهاتف */}
@@ -59,11 +96,7 @@ export default function Header() {
         {navItems.map((item, index) => (
           <li
             key={index}
-            className={`cursor-pointer active:scale-95 transition duration-300 ${
-              darkMode
-                ? "text-gray-100/70 hover:text-white"
-                : "text-black/70 hover:text-black"
-            }`}
+            className={`cursor-pointer active:scale-95 transition duration-300 dark:text-gray-100/70 dark:hover:text-white text-black/70 hover:text-black`}
           >
             {t(item)}
           </li>
@@ -71,40 +104,64 @@ export default function Header() {
       </ul>
 
       {/* إعدادات اللغة والوضع */}
-      <div className="hidden sm:flex gap-2 items-center">
-        <Button
-          variant="ghost"
-          onClick={() =>
-            i18n.changeLanguage(i18n.language === "ar" ? "en" : "ar")
-          }
+      <div
+        className="hidden sm:flex gap-2 items-center relative"
+        ref={containerRef}
+      >
+        {/* زر الإعدادات */}
+        <button
+          type="button"
+          onClick={toggleMenu}
+          className="bg-white/6 hover:bg-white/10 flex flex-row justify-center items-center py-0.5 px-2.5 rounded-full"
         >
-          {i18n.language === "ar" ? "EN" : "AR"}
-        </Button>
-        <Button
-          className={darkMode ? "hover:bg-white" : "hover:bg-black"}
-          variant="ghost"
-          onClick={() => setDarkMode(!darkMode)}
-        >
-          {darkMode ? <Sun /> : <Moon />}
-        </Button>
+          <i className="ri-settings-line text-xl"></i>
+          <i className="ri-arrow-down-s-line ml-1"></i>
+        </button>
+
+        {/* القائمة المنسدلة */}
+        {settingsOpen && (
+          <div
+            ref={menuRef}
+            className="absolute top-full mt-2 -right-20 bg-white dark:bg-white/5 rounded-xl shadow-lg p-1 flex flex-row z-50 justify-center items-center"
+          >
+            {/* تغيير اللغة */}
+            <Button
+              variant="ghost"
+              className="dark:hover:text-white hover:text-black dark:text-gray-100/70"
+              onClick={() =>
+                i18n.changeLanguage(i18n.language === "ar" ? "en" : "ar")
+              }
+            >
+              <i className="ri-earth-line mr-1"></i>
+              {i18n.language === "ar" ? "EN" : "AR"}
+            </Button>
+            <hr />
+            {/* تبديل الوضع */}
+            <Button
+              variant="ghost"
+              className="dark:hover:text-white hover:text-black dark:text-gray-100/70"
+              onClick={() => setDarkMode(!darkMode)}
+            >
+              {darkMode ? (
+                <Sun className="w-5 h-5" />
+              ) : (
+                <Moon className="w-5 h-5" />
+              )}
+            </Button>
+          </div>
+        )}
       </div>
 
       {/* القائمة - في وضع الهاتف */}
       {isMenuOpen && (
         <div
           ref={menuRef}
-          className={`fixed top-0 left-0 w-full h-full ${
-            darkMode ? "bg-dark/80" : "bg-white/80"
-          }  backdrop-blur-lg z-30 flex flex-col items-center justify-center gap-6 text-xl transition-all duration-500`}
+          className={`fixed top-0 left-0 w-full h-full bg-white dark:bg-dark backdrop-blur-lg z-30 flex flex-col items-center justify-center gap-6 text-xl transition-all duration-500`}
         >
           {navItems.map((item, index) => (
             <li
               key={index}
-              className={`cursor-pointer list-none active:scale-95 transition duration-300 ${
-                darkMode
-                  ? "text-gray-100 hover:text-white"
-                  : "text-black hover:text-gray-900"
-              }`}
+              className={`cursor-pointer list-none active:scale-95 transition duration-300 dark:text-gray-100 dark:hover:text-white text-black hover:text-gray-900`}
               onClick={() => setIsMenuOpen(false)}
             >
               {t(item)}
@@ -122,11 +179,11 @@ export default function Header() {
               {i18n.language === "ar" ? "EN" : "AR"}
             </Button>
             <Button
-              className={darkMode ? "hover:bg-white" : "hover:bg-black"}
+              className={"dark:hover:bg-white hover:bg-black"}
               variant="ghost"
               onClick={() => setDarkMode(!darkMode)}
             >
-              {darkMode ? <Sun /> : <Moon />}
+              {darkMode ? <Sun className="" /> : <Moon />}
             </Button>
           </div>
         </div>
