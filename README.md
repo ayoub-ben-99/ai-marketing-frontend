@@ -1,69 +1,78 @@
-# React + TypeScript + Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+# 🧠 AI Assistant for E-Commerce — Frontend
 
-Currently, two official plugins are available:
+This project is a responsive frontend interface for an **AI-powered assistant** designed to support e-commerce operations. It provides a clean UI/UX with modern animations, multi-language support, and theme switching between light and dark modes.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## Expanding the ESLint configuration
+## 🚀 Features
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- 🌐 **Internationalization** (i18n) — supports Arabic and English with language switcher
+- 🌗 **Dark / Light Mode Toggle**
+- 🎬 **GSAP Animations** for smooth UI transitions
+- 📱 **Responsive Design** for mobile, tablet, and desktop
+- 🎨 **Modern UI** built with Tailwind CSS and Lucide icons
+- ⚙️ **Settings Dropdown** menu with animations
+- 🌍 **Language Detection** using `i18next-browser-languagedetector`
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+---
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+## 🛠️ Tech Stack
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+### Frontend Framework
+- **React 19** — Modern and fast rendering
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### Styling
+- **Tailwind CSS 4**
+- **Remix Icons** and **Lucide-react** for iconography
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+### Internationalization
+- `i18next` + `react-i18next` for localization
+- `i18next-browser-languagedetector` for automatic language detection
 
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### Animations
+- `GSAP` (GreenSock Animation Platform) for fluid and performant transitions
+
+### Development Tools
+- **TypeScript** — Strongly typed JavaScript
+- **Vite** — Lightning-fast development bundler
+- **ESLint** — Code quality and consistency
+
+---
+
+## 📦 Dependencies
+
+```json
+"dependencies": {
+  "@tailwindcss/vite": "^4.1.11",
+  "gsap": "^3.13.0",
+  "i18next": "^25.2.1",
+  "i18next-browser-languagedetector": "^8.2.0",
+  "lucide-react": "^0.525.0",
+  "react": "^19.1.0",
+  "react-dom": "^19.1.0",
+  "react-i18next": "^15.5.3",
+  "remixicon": "^4.6.0",
+  "tailwindcss": "^4.1.11"
+}
+````
+
+---
+
+## 📸 Screenshot
+
+![](./public/Screen%20dark.png)
+
+![](./public/Screen%20light.png)
+
+
+---
+
+## 🧪 Getting Started
+
+```bash
+git clone https://github.com/ayoub-ben-99/ai-marketing-frontend.git
+cd ai-marketing-frontend
+npm install
+npm run dev
 ```
